@@ -1,0 +1,1 @@
+# nei-ts-define-auto-generator
