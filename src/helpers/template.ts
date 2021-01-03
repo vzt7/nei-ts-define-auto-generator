@@ -237,10 +237,13 @@ export const genReducersTemplate = async (params: InjectParams[]) => {
     typeDeps.push(`${interfaceName}Request`);
 
     // create actions
+    const firstWordLowerCaseInterfaceName = getFirstLowerCaseInterfaceName(
+      interfaceName
+    );
     const actionsRows = rows.map((row) => `"${row.name}"`).join(", ");
-    const actionsRowsWithWrapper = `  ${interfaceName}: ${
+    const actionsRowsWithWrapper = `  ${firstWordLowerCaseInterfaceName}: ${
       actionsRows ? `[${actionsRows}]` : null
-    },\n  ${interfaceName}Success: null,`;
+    },\n  ${firstWordLowerCaseInterfaceName}Success: null,`;
     actionsRows && actionsContent.push(actionsRowsWithWrapper);
 
     // initial state
@@ -253,7 +256,7 @@ export const genReducersTemplate = async (params: InjectParams[]) => {
         4
       )}state = INITIAL_STATE,\n${space(4)}action,\n${space(2)}) => \{\n${space(
         4
-      )}return \{\n${space(6)}...state,\n${space(4)}\},\n${space(2)}\},`;
+      )}return \{\n${space(6)}...state,\n${space(4)}\}\n${space(2)}\},`;
     const reducersRows = `${getReducersRow(interfaceName)}\n${getReducersRow(
       `${interfaceName}Success`
     )}`;
@@ -276,7 +279,7 @@ export const genReducersTemplate = async (params: InjectParams[]) => {
 
   actionsContent.push(`\});`);
   statesContent.push(`};`);
-  reducersContent.push(`\}`);
+  reducersContent.push(`\});`);
 
   const result = [].concat(
     deps.join("\n"),
